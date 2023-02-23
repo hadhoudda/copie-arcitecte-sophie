@@ -64,3 +64,17 @@ const filtreProjects = (work, filterName) => {
         }
     });
 }
+
+function checkIsAdmin(){
+
+   const userInfos = localStorage.getItem("userInfos");
+
+   if(userInfos !== null){
+
+    // Je peux afficher les boutons de la modale
+    
+   }
+
+}
+
+checkIsAdmin();

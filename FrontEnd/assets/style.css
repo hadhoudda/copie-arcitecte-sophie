@@ -277,3 +277,16 @@ footer nav ul {
 	margin: 2em
 }
 
+.show{
+
+   display:inline-block;
+
+}
+
+.hide{
+
+	display:none;
+
+}
+
+
