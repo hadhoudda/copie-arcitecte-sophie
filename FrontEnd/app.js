@@ -1,12 +1,12 @@
 let works;
 const getData = async () => {
     try {
-        const reponse = await fetch("http://localhost:5678/api/works")//(config.host + "/api/works");
-        console.log(reponse)
-        if (!reponse.ok) {
-            throw new Error(`an error occured with status: ${reponse.status}`);
+        const response = await fetch("http://localhost:5678/api/works")//(config.host + "/api/works");
+        console.log(response)
+        if (!response.ok) {
+            throw new Error(`an error occured with status: ${response.status}`);
         }
-        works = await reponse.json();
+        works = await response.json();
         afficherProject(works);
     } catch (error) {
         alert(error);
@@ -66,15 +66,27 @@ const filtreProjects = (work, filterName) => {
 }
 
 function checkIsAdmin(){
-
-   const userInfos = localStorage.getItem("userInfos");
-
-   if(userInfos !== null){
-
-    // Je peux afficher les boutons de la modale
+    const token = localStorage.getItem("token");
+  if(token !== null){
+     //affichage modification page admin
+     //partie haute noir
+     document.querySelector('#header-black').classList.replace("hide","show-head-black");
+    //boutton edit
+    document.querySelector('#button-edit-photo').classList.replace("hide","show-edit-photo");
+    document.querySelector('#button-edit-text').classList.replace("hide","button-edit-text");
+    document.querySelector('#button-edit-projet').classList.replace("hide","show-edit-projet");
+     // Je peux afficher les boutons de la modale
+    sectionFilter.classList.replace("filter","hide")
     
-   }
-
+  }
+  }
+  checkIsAdmin();
+function disconnectAdmin(){
+    const token = localStorage.getItem("token");
+    localStorage.removeItem("token")
 }
-
-checkIsAdmin();
+//////////////
+// function disconnect(){
+// 	localStorage.removeItem("token");
+// 	location.href = "login.html";
+// }
