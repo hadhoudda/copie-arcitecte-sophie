@@ -1,13 +1,16 @@
-let works;
+import {  affichModal} from "./modal.mjs";
+var works;
+const token = localStorage.getItem("token");
 const getData = async () => {
     try {
-        const response = await fetch("http://localhost:5678/api/works")//(config.host + "/api/works");
+        const response = await fetch("http://localhost:5678/api/works")
         console.log(response)
         if (!response.ok) {
             throw new Error(`an error occured with status: ${response.status}`);
         }
         works = await response.json();
         afficherProject(works);
+        affichModal(works);
     } catch (error) {
         alert(error);
         //document.querySelector('.filter').innerHTML=('Impossible de télècharger les porjets essayer plus tard')
@@ -18,10 +21,10 @@ getData();
 //ajouter les bouttons de filtre
 const sectionFilter = document.querySelector(".filter");
 sectionFilter.innerHTML =
-    '<button id="button-all-works" class="style-button" type= "button"> Tous</button>' +
-    '<button id="button-object" class="style-button"> Objets</button>' +
-    '<button id="button-apartment" class="style-button"> Appartements</button>' +
-    '<button id="button-hotel" class="style-button"> Hôtels & restaurants</button>';
+    '<button id="button-all-works" class="style-button-filtre" type= "button"> Tous</button>' +
+    '<button id="button-object" class="style-button-filtre"> Objets</button>' +
+    '<button id="button-apartment" class="style-button-filtre"> Appartements</button>' +
+    '<button id="button-hotel" class="style-button-filtre"> Hôtels & restaurants</button>';
 const buttonAllCategory = document.getElementById("button-all-works");
 const buttonCategory1 = document.querySelector("#button-object");
 const buttonCategory2 = document.querySelector("#button-apartment");
@@ -44,13 +47,25 @@ buttonCategory3.addEventListener("click", function () {
 const afficherProject = (works) => {
     document.querySelector(".gallery").innerHTML = null;
     for (let elem in works) {
-        const article = works[elem];
+        // for (let i = 0; i < data.length; i++) {
+        //     const article = document.createElement("article");
+        //     const imageElement = document.createElement("img");
+        //     imageElement.setAttribute("crossorigin", "anonymous");
+        //     imageElement.setAttribute("src", data[i].imageUrl);
+        //     imageElement.setAttribute("alt", data[i].title);
+        //     const titreElement = document.createElement("figcaption");
+        //     titreElement.innerText = data[i].title;
+        //     article.appendChild(imageElement);
+        //     article.appendChild(titreElement);
+        //     gallery.appendChild(article)
+        // }
         const sectionGallery = document.querySelector(".gallery");
         const worksElement = document.createElement("article");
-        const titleElement = document.createElement("h3");
-        titleElement.innerText = article.title;
         const imageElement = document.createElement("img");
-        imageElement.src = article.imageUrl;
+        imageElement.src = works[elem].imageUrl
+        const titleElement = document.createElement("h3");
+        titleElement.innerText = works[elem].title;
+        
         sectionGallery.appendChild(worksElement);
         worksElement.appendChild(imageElement);
         worksElement.appendChild(titleElement);
@@ -66,7 +81,7 @@ const filtreProjects = (work, filterName) => {
 }
 
 function checkIsAdmin(){
-    const token = localStorage.getItem("token");
+    
   if(token !== null){
      //affichage modification page admin
      //partie haute noir
@@ -77,16 +92,15 @@ function checkIsAdmin(){
     document.querySelector('#button-edit-projet').classList.replace("hide","show-edit-projet");
      // Je peux afficher les boutons de la modale
     sectionFilter.classList.replace("filter","hide")
-    
+    document.querySelector('#connect-admin').classList.replace("show", "hide")
+    document.querySelector('#deconnect-admin').classList.replace("hide", "show");
   }
   }
-  checkIsAdmin();
-function disconnectAdmin(){
-    const token = localStorage.getItem("token");
+  checkIsAdmin()
+////// deconnexion ////////////
+document.querySelector('#deconnect-admin').addEventListener('click', function(){
     localStorage.removeItem("token")
-}
-//////////////
-// function disconnect(){
-// 	localStorage.removeItem("token");
-// 	location.href = "login.html";
-// }
+    document.querySelector('#connect-admin').classList.replace("hide", "show")
+    document.querySelector('#deconnect-admin').classList.replace("show", "hide");
+})
+
