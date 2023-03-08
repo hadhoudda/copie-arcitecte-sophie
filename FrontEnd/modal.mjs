@@ -112,8 +112,8 @@ const modal = document.querySelector("#modal1");
 
          return response.json();
       }).then((result)=>{
-
-        
+          console.log(result)
+         // Ici il faut ajouter la photo dans la gallerie de l'architecte
       })
 
       
