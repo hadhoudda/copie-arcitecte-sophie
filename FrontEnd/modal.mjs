@@ -1,5 +1,8 @@
-export {affichModal}
-const modal = document.querySelector("#modal1")
+export {affichModal};
+
+let workPicture;
+const token = JSON.parse(localStorage.getItem("token")).token;
+const modal = document.querySelector("#modal1");
     //////open modal///////////
 
      //////open modal///////////
@@ -59,7 +62,6 @@ const modal = document.querySelector("#modal1")
             worksElement.appendChild(imageElement);
             worksElement.appendChild(titleElement);
         }
-        console.log(works)
     //     document.querySelector(".close-modal").addEventListener('click', closeModal);
     //     document.querySelector('.js-modal').addEventListener('click', openModal);
     // 
@@ -70,11 +72,70 @@ const modal = document.querySelector("#modal1")
     document.querySelector(".container-ad-photo-modal").style.display = null;
  });
   ///////////////////  fonction ajout photo ///////////////
-  function adPhoto(){
-console.log('rr')
+  function addPhoto(event){
+      event.preventDefault();
+
+      const titleValue = document.querySelector("#name").value;
+      const categoryValue = document.querySelector("#pet-select").value;
+
+      if(titleValue === "" || categoryValue === "" || workPicture === undefined){
+
+          return alert("Veuillez remplir tous les champs.");
+
+      }
+
+      const categoriesChoices = ["objets", "appartements", "hotels-restaurants"];
+
+      const categoryChoiceInteger = categoriesChoices.findIndex((choice)=>{
+
+            return choice === categoryValue;
+
+      });
+
+      const formData = new FormData();
+
+      formData.append("image", workPicture);
+
+      formData.append("title", titleValue);
+
+      formData.append("category", categoryChoiceInteger + 1);
+
+      fetch("http://localhost:5678/api/works",{
+  
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData
+
+      }).then((response)=>{
+
+         return response.json();
+      }).then((result)=>{
+
+        
+      })
+
+      
   }
 
+  document.querySelector("#send-picture").addEventListener("click", addPhoto);
   //////////ecout boutton ajouter photo ///////
-  document.querySelector("#input-file").addEventListener('click', function(){
-    console.log('rrmm')
+  document.querySelector("#input-file").addEventListener('change', function(event){
+      //  console.log(window.URL.createObjectURL(event.target.files));
+
+       const pictureWork = event.target.files;
+
+       const mimeType = ["image/jpg", "image/png", "image/jpeg", "image/webp"];
+
+       const pictureWorkMimeType = pictureWork[0].type;
+
+       if(mimeType.includes(pictureWorkMimeType) === false){
+
+           return alert("Veuillez choisir une image au format jpg, jpeg, png ou webp");
+
+       }
+
+       workPicture = event.target.files[0];
+
   })
